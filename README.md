@@ -2,9 +2,11 @@
 Recover photos from sdcard(or sdcard image file) taken with Nikon DSLR(Tested on D3200).
 
 ### How to build
-`meson setup builddir`
-`cd builddir`
-`ninja`
+```shell
+$ meson setup builddir
+$ cd builddir
+$ ninja
+```
 
 ### Run
 ```shell
