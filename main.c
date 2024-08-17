@@ -7,7 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <errno.h>
 
 
 #define JPEG_HEADER 0xd8ff
@@ -56,20 +55,20 @@ int main(int argc, char **argv)
     img_fd = open(argv[1], O_RDONLY);
     if (img_fd == -1)
     {
-        fprintf(stderr, "Error opening image file(%s). Error: %s\n", img_file, strerror(errno));
+        fprintf(stderr, "Error opening image file(%s). Error: %m\n", img_file);
         return EXIT_FAILURE;
     }
 
     if (fstat(img_fd, &img_stat) != 0)
     {
-        fprintf(stderr, "Error stating image file(%s). Error: %s\n", img_file, strerror(errno));
+        fprintf(stderr, "Error stating image file(%s). Error: %m\n", img_file);
         return EXIT_FAILURE;
     }
 
     img_data = mmap(NULL, img_stat.st_size, PROT_READ, MAP_PRIVATE, img_fd, 0);
     if (img_data == MAP_FAILED)
     {
-        fprintf(stderr, "Error maping image file(%s). Error: %s\n", img_file, strerror(errno));
+        fprintf(stderr, "Error maping image file(%s). Error: %m\n", img_file);
         return EXIT_FAILURE;
     }
 
@@ -112,18 +111,18 @@ int main(int argc, char **argv)
                     out_fd = open(dest_img_name, O_CREAT | O_WRONLY | O_TRUNC, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
                     if (out_fd == -1)
                     {
-                        fprintf(stderr, "Error creating img file(%s). Error: %s\n", dest_img_name, strerror(errno));
+                        fprintf(stderr, "Error creating img file(%s). Error: %m\n", dest_img_name);
                         break;
                     }
 
                     written = write(out_fd, ptr, img_size);
                     if (written < 0)
                     {
-                        fprintf(stderr, "Error writing img file(%s). Error: %s\n", dest_img_name, strerror(errno));
+                        fprintf(stderr, "Error writing img file(%s). Error: %m\n", dest_img_name);
                     }
                     else if (written != img_size)
                     {
-                        fprintf(stderr, "Partial write to img file(%s). Error: %s\n", dest_img_name, strerror(errno));
+                        fprintf(stderr, "Partial write to img file(%s). Error: %m\n", dest_img_name);
                     }
 
                     close(out_fd);
